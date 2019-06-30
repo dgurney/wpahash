@@ -9,6 +9,8 @@ import (
 	"golang.org/x/sys/windows/registry"
 )
 
+const version = "0.0.1"
+
 // Thanks Lucas for the initial C++ implementation and other information!
 func calculateEulaHash(wpaHive string, userBytes []byte) (uint64, error) {
 	// Debug symbols call the hash EulaHash
@@ -50,9 +52,15 @@ func main() {
 		return
 	}
 
-	local := flag.Bool("l", false, "Calculate hash of the current installation. Doesn't work after Windows 10 1511 or before early Windows 8 builds.")
+	local := flag.Bool("l", false, "Calculate hash of the current installation/PE. Doesn't work on Windows versions before 79xx-era Windows 8 builds, or after Windows 10 1511.")
 	hive := flag.String("h", "", "Mounted hive name.")
+	ver := flag.Bool("v", false, "Print the program version number and exit")
 	flag.Parse()
+
+	if *ver {
+		fmt.Printf("wpahash v%s by Daniel Gurney\n", version)
+		return
+	}
 
 	if *local {
 		*hive = "SYSTEM"
