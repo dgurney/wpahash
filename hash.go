@@ -9,7 +9,7 @@ import (
 	"golang.org/x/sys/windows/registry"
 )
 
-const version = "0.0.1"
+const version = "1.0.0"
 
 // Thanks for the initial C++ implementation and other information, Lucas!
 func calculateEulaHash(wpaHive string, userBytes []byte, showRaw bool) (uint64, error) {
