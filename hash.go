@@ -19,7 +19,7 @@ func calculateEulaHash(wpaHive string, userBytes []byte, showRaw bool) (uint64, 
 	case len(userBytes) > 0:
 		// For testing
 		if len(userBytes) != 0x80 {
-			return 0, fmt.Errorf("the provided EulaHash is not 80 bytes long")
+			return 0, fmt.Errorf("the provided registry data is not 80 bytes long")
 		}
 		eulaHash = userBytes
 	default:
