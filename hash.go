@@ -11,8 +11,8 @@ import (
 
 const version = "0.0.1"
 
-// Thanks Lucas for the initial C++ implementation and other information!
-func calculateEulaHash(wpaHive string, userBytes []byte) (uint64, error) {
+// Thanks for the initial C++ implementation and other information, Lucas!
+func calculateEulaHash(wpaHive string, userBytes []byte, showRaw bool) (uint64, error) {
 	// Debug symbols call the hash EulaHash
 	eulaHash := make([]byte, 0x80)
 	switch {
@@ -43,6 +43,9 @@ func calculateEulaHash(wpaHive string, userBytes []byte) (uint64, error) {
 			hashBytes[j] ^= eulaHash[prev+i]
 		}
 	}
+	if showRaw {
+		fmt.Printf("Raw data: % x\n", eulaHash)
+	}
 	return binary.LittleEndian.Uint64(hashBytes), nil
 }
 
@@ -51,10 +54,10 @@ func main() {
 		fmt.Printf("This program does not do anything meaningful on %s.\n", runtime.GOOS)
 		return
 	}
-
+	showRaw := flag.Bool("r", false, "Show the raw data from the registry in addition to the final hash.")
 	local := flag.Bool("l", false, "Calculate hash of the current installation/PE. Doesn't work on Windows versions before 79xx-era Windows 8 builds, or after Windows 10 1511.")
 	hive := flag.String("h", "", "Mounted hive name.")
-	ver := flag.Bool("v", false, "Print the program version number and exit")
+	ver := flag.Bool("v", false, "Print the program version number and exit.")
 	flag.Parse()
 
 	if *ver {
@@ -71,7 +74,7 @@ func main() {
 		return
 	}
 
-	hash, err := calculateEulaHash(*hive, []byte{})
+	hash, err := calculateEulaHash(*hive, []byte{}, *showRaw)
 	if err != nil {
 		fmt.Println("Hash calculation error:", err)
 		return
