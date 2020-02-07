@@ -4,12 +4,11 @@ import (
 	"encoding/binary"
 	"flag"
 	"fmt"
-	"runtime"
 
 	"golang.org/x/sys/windows/registry"
 )
 
-const version = "1.0.0"
+const version = "1.0.1"
 
 // Thanks for the initial C++ implementation and other information, Lucas!
 func calculateEulaHash(wpaHive string, userBytes []byte, showRaw bool) (uint64, error) {
@@ -50,10 +49,6 @@ func calculateEulaHash(wpaHive string, userBytes []byte, showRaw bool) (uint64, 
 }
 
 func main() {
-	if runtime.GOOS != "windows" {
-		fmt.Printf("This program does not do anything meaningful on %s.\n", runtime.GOOS)
-		return
-	}
 	showRaw := flag.Bool("r", false, "Show the raw data from the registry in addition to the final hash.")
 	local := flag.Bool("l", false, "Calculate hash of the current installation/PE. Doesn't work on Windows versions before 79xx-era Windows 8 builds, or after Windows 10 1511.")
 	hive := flag.String("h", "", "Mounted hive name.")
